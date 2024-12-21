@@ -10,7 +10,7 @@ RUN cargo build --release
 
 FROM debian:bookworm-slim AS prod
 
-RUN  apt-get update && apt-get install -y libssl-dev
+RUN  apt-get update && apt-get install -y libssl-dev curl
 
 COPY --from=build /app/target/release/aggregator /aggregator
 

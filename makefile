@@ -1,25 +1,26 @@
 create-cluster:
-	k3d cluster create ssi
+	kind create cluster --name ssi --config ./kind/kind-config.yaml
+	kubectl apply -f https://kind.sigs.k8s.io/examples/ingress/deploy-ingress-nginx.yaml
 
 delete-cluster:
-	k3d cluster delete ssi
-
-stop-cluster:
-	k3d cluster stop ssi
-
-start-cluster:
-	k3d cluster start ssi
+	kind delete cluster --name ssi
 
 deploy:
 	helm repo add kyverno https://kyverno.github.io/kyverno/
 	helm repo add falcosecurity https://falcosecurity.github.io/charts
 	helm repo update
 	helm install kyverno kyverno/kyverno -n kyverno --create-namespace
-	helm install falco falcosecurity/falco -n falco --create-namespace
-	echo "Waiting for kyverno and falco to be ready..."
+	helm install  -n falco --create-namespace --set tty=true --set driver.kind=modern_ebpf --generate-name falcosecurity/falco
+	@if ! command -v istioctl &> /dev/null; then \
+		$(MAKE) install-istio; \
+	fi
+	kubectl label namespace sentence istio-injection=enabled
+	echo "Waiting for Ingress to be ready..."
+	kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=10m
 	sleep 30
 	kubectl apply -f kyverno/
 	kubectl apply -f k8s/
+	kubectl apply -f ./istio
 
 destroy:
 	kubectl delete -f kyverno/
@@ -30,3 +31,9 @@ destroy:
 run:
 	$(MAKE) create-cluster
 	$(MAKE) deploy
+
+install-istio:
+	curl -L https://istio.io/downloadIstio | sh -
+	cd istio-*
+	export PATH=$$PWD/bin:$$PATH
+	istioctl install --set profile=demo -y

@@ -12,6 +12,11 @@ spec:
           - resources:
               kinds:
                 - Pod
+      exclude:
+        any:
+          - resources:
+              namespaces:
+                - falco
       validate:
         message: "Resource limits are required."
         pattern:
