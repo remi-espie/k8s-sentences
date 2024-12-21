@@ -14,12 +14,11 @@ deploy:
 	@if ! command -v istioctl &> /dev/null; then \
 		$(MAKE) install-istio; \
 	fi
-	kubectl label namespace sentence istio-injection=enabled
 	echo "Waiting for Ingress to be ready..."
 	kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=10m
-	sleep 30
 	kubectl apply -f kyverno/
 	kubectl apply -f k8s/
+	kubectl label namespace sentence istio-injection=enabled
 	kubectl apply -f ./istio
 
 destroy:
@@ -34,6 +33,4 @@ run:
 
 install-istio:
 	curl -L https://istio.io/downloadIstio | sh -
-	cd istio-*
-	export PATH=$$PWD/bin:$$PATH
-	istioctl install --set profile=demo -y
+	istio-*/bin/istioctl install --set profile=demo -y
