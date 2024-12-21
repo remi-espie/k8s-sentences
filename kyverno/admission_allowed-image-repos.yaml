@@ -35,8 +35,8 @@ spec:
         pattern:
           spec:
             =(ephemeralContainers):
-              - image: "ghcr.io/remi-espie/sentences/*"
+              - image: "ghcr.io/remi-espie/k8s-sentences/*"
             =(initContainers):
-              - image: "ghcr.io/remi-espie/sentences/*"
+              - image: "ghcr.io/remi-espie/k8s-sentences/*"
             containers:
-              - image: "ghcr.io/remi-espie/sentences/*"
+              - image: "ghcr.io/remi-espie/k8s-sentences/*"

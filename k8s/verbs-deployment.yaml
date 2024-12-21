@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: verbs
-        image: ghcr.io/remi-espie/sentences/verbs:latest
+        image: ghcr.io/remi-espie/k8s-sentences/verbs:latest
         resources:
           limits:
             memory: "128Mi"
