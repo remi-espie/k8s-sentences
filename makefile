@@ -37,10 +37,3 @@ destroy:
 run:
 	$(MAKE) create-cluster
 	$(MAKE) deploy
-
-test:
-	@if command -v istioctl &> /dev/null; then \
-		istioctl install --set profile=demo -y; \
-	else \
-		curl -L https://istio.io/downloadIstio | sh - && istio-*/bin/istioctl install --set profile=demo -y; \
-	fi
