@@ -11,8 +11,7 @@ deploy:
 	helm repo update
 	helm install kyverno kyverno/kyverno -n kyverno --create-namespace
 	helm install  -n falco --create-namespace --set tty=true --set driver.kind=modern_ebpf --generate-name falcosecurity/falco
-	kubectl get crd gateways.gateway.networking.k8s.io &> /dev/null || \
-  	{ kubectl kustomize "github.com/kubernetes-sigs/gateway-api/config/crd?ref=v1.2.0" | kubectl apply -f -; }
+	kubectl kustomize "github.com/kubernetes-sigs/gateway-api/config/crd?ref=v1.2.0" | kubectl apply -f -;
 	@if command -v istioctl &> /dev/null; then \
 		istioctl install --set profile=minimal -y; \
 	else \
