@@ -12,7 +12,7 @@ deploy:
 	helm install kyverno kyverno/kyverno -n kyverno --create-namespace
 	helm install  -n falco --create-namespace --set tty=true --set driver.kind=modern_ebpf --generate-name falcosecurity/falco
 	kubectl kustomize "github.com/kubernetes-sigs/gateway-api/config/crd?ref=v1.2.0" | kubectl apply -f -;
-	@if command -v istioctl &> /dev/null; then \
+	@if command -v istioctl 2> /dev/null; then \
 		istioctl install --set profile=minimal -y; \
 	else \
 		curl -L https://istio.io/downloadIstio | sh - && istio-*/bin/istioctl install --set profile=minimal -y; \
