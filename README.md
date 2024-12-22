@@ -33,11 +33,7 @@ make destroy
 
 ### The app
 
-The app will be accessible through the Ingress at [http://aggregator.private](http://aggregator.private). Don't forget to add the following line to your `/etc/hosts` file:
-
-```bash
-127.0.0.1 aggregator.private
-```
+The app will be accessible through the Ingress at [http://aggregator.private](http://aggregator.private). To achieve this using kind,  [cloud-provider-kind](https://github.com/kubernetes-sigs/cloud-provider-kind) should be running on the host machine.
 
 The aggregator simply combines the results of the verb and noun services and returns them without any formating.
 
@@ -83,6 +79,6 @@ If not installed, Istio will be installed on the local machine.
 To test the Istio security, you can run the following command:
 
 ```bash
-kubectl exec -it $(kubectl get pods --selector=app=aggregator -o name -n sentence) -n sentence -- curl -v http://verb:8081
+kubectl exec -it $(kubectl get pods --selector=app=aggregator -o name -n sentence) -n sentence -- curl -v http://nouns:8081
 ```
 

@@ -1,8 +1,17 @@
 apiVersion: v1
+kind: ServiceAccount
+metadata:
+    name: aggregator
+    namespace: sentence
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: aggregator
   namespace: sentence
+  labels:
+    app: aggregator
+    service: aggregator
 spec:
   selector:
     app: aggregator

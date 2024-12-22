@@ -10,17 +10,17 @@ spec:
   rules:
     - from:
         - source:
-            principals: ["cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account"]
+            principals: ["*"]
 ---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: allow-aggregator-to-verb-noun
+  name: allow-aggregator-to-verbs
   namespace: sentence
 spec:
   selector:
     matchLabels:
-      app: verb
+      app: verbs
   rules:
     - from:
         - source:
@@ -29,7 +29,7 @@ spec:
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
-  name: allow-aggregator-to-verb-noun
+  name: allow-aggregator-to-nouns
   namespace: sentence
 spec:
   selector:

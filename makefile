@@ -11,17 +11,24 @@ deploy:
 	helm repo update
 	helm install kyverno kyverno/kyverno -n kyverno --create-namespace
 	helm install  -n falco --create-namespace --set tty=true --set driver.kind=modern_ebpf --generate-name falcosecurity/falco
-	@if ! command -v istioctl &> /dev/null; then \
-		$(MAKE) install-istio; \
+	kubectl get crd gateways.gateway.networking.k8s.io &> /dev/null || \
+  	{ kubectl kustomize "github.com/kubernetes-sigs/gateway-api/config/crd?ref=v1.2.0" | kubectl apply -f -; }
+	@if command -v istioctl &> /dev/null; then \
+		istioctl install --set profile=minimal -y; \
+	else \
+		curl -L https://istio.io/downloadIstio | sh - && istio-*/bin/istioctl install --set profile=minimal -y; \
 	fi
 	echo "Waiting for Ingress to be ready..."
 	kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=10m
-	kubectl apply -f kyverno/
-	kubectl apply -f k8s/
+	kubectl apply -f k8s/00-namespace.yaml
 	kubectl label namespace sentence istio-injection=enabled
-	kubectl apply -f ./istio
+	kubectl apply -f k8s/
+	kubectl apply -f kyverno/
+	kubectl apply -f istio/
 
 destroy:
+	kubectl delete -f istio/
+	kubectl label namespace sentence istio-injection-
 	kubectl delete -f kyverno/
 	helm uninstall kyverno -n kyverno
 	helm uninstall falco -n falco
@@ -31,6 +38,9 @@ run:
 	$(MAKE) create-cluster
 	$(MAKE) deploy
 
-install-istio:
-	curl -L https://istio.io/downloadIstio | sh -
-	istio-*/bin/istioctl install --set profile=demo -y
+test:
+	@if command -v istioctl &> /dev/null; then \
+		istioctl install --set profile=demo -y; \
+	else \
+		curl -L https://istio.io/downloadIstio | sh - && istio-*/bin/istioctl install --set profile=demo -y; \
+	fi
