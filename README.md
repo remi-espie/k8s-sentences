@@ -37,6 +37,12 @@ The app will be accessible through the Ingress at [http://aggregator.private](ht
 
 The aggregator simply combines the results of the verb and noun services and returns them without any formating.
 
+To test the app, you can run the following command:
+
+```bash
+curl -HHost:aggregator.private "http://$(kubectl get svc -n istio-ingress sentence-gateway-istio -o jsonpath='{.status.loadBalancer.ingress[0].ip}')" 
+```
+
 ### Kyverno
 
 The app is secured by Kyverno. The policies are defined in the `kyverno` directory. The policies are as follows:
@@ -82,3 +88,8 @@ To test the Istio security, you can run the following command:
 kubectl exec -it $(kubectl get pods --selector=app=aggregator -o name -n sentence) -n sentence -- curl -v http://nouns:8081
 ```
 
+And then see the logs from istio-proxy:
+
+```bash
+kubectl logs -l app=aggregator -c istio-proxy -n sentence
+```

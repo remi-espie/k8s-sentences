@@ -23,8 +23,8 @@ deploy:
 	kubectl apply -f k8s/00-namespace.yaml
 	kubectl label namespace sentence istio-injection=enabled
 	kubectl apply -f k8s/
-	kubectl apply -f kyverno/
 	kubectl apply -f istio/
+	kubectl apply -f kyverno/
 
 destroy:
 	kubectl delete -f istio/
