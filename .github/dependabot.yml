@@ -11,5 +11,5 @@ updates:
       interval: "weekly"
     groups:
       cargo-deps:
-        pattern:
+        patterns:
           - "*"
