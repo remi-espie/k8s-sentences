@@ -1,5 +1,4 @@
 use actix_web::{web, App, HttpServer, Responder};
-use local_ipaddress;
 
 async fn aggregate() -> impl Responder {
     let nouns = reqwest::get("http://nouns:8081")
