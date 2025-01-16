@@ -13,8 +13,8 @@ async fn aggregate() -> impl Responder {
         .text()
         .await
         .unwrap();
-    let local_ip = local_ipaddress::get().unwrap();
-    format!("{} {} from {}", nouns, verbs, local_ip)
+    let hostname = hostname::get().unwrap().into_string().unwrap();
+    format!("{} {} from {}", nouns, verbs, hostname)
 }
 
 #[actix_web::main]
