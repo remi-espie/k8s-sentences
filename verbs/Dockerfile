@@ -1,4 +1,4 @@
-FROM rust:latest AS build
+FROM clux/muslrust AS build
 
 WORKDIR /app
 
@@ -6,11 +6,13 @@ COPY Cargo.toml ./
 
 COPY src src
 
-RUN cargo build --release
+RUN rustup target add x86_64-unknown-linux-musl
 
-FROM debian:bookworm-slim AS prod
+RUN cargo build --release --target=x86_64-unknown-linux-musl
 
-COPY --from=build /app/target/release/verbs /verbs
+FROM scratch AS prod
+
+COPY --from=build /app/target/x86_64-unknown-linux-musl/release/verbs /verbs
 
 COPY verbs.json verbs.json
 
