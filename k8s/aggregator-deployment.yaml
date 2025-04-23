@@ -16,7 +16,7 @@ spec:
       serviceAccountName: aggregator
       containers:
       - name: aggregator
-        image: ghcr.io/remi-espie/k8s-sentences/aggregator:latest
+        image: ghcr.io/remi-espie/k8s-sentences/postgres/aggregator:latest
         resources:
           limits:
             memory: "128Mi"

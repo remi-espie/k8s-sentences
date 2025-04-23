@@ -1,13 +1,13 @@
 use actix_web::{web, App, HttpServer, Responder};
 
 async fn aggregate() -> impl Responder {
-    let nouns = reqwest::get("http://nouns:8081")
+    let nouns = reqwest::get("http://words:8081/noun")
         .await
         .unwrap()
         .text()
         .await
         .unwrap();
-    let verbs = reqwest::get("http://verbs:8082")
+    let verbs = reqwest::get("http://words:8081/verb")
         .await
         .unwrap()
         .text()

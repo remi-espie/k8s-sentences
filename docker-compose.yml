@@ -1,0 +1,33 @@
+services:
+  words:
+    image: words:latest
+    ports:
+      - 8081:8081
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/words
+    depends_on:
+      - postgres
+
+  aggregator:
+    image: aggregator:latest
+    ports:
+      - 8080:8080
+    depends_on:
+      - words
+
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=aggregator
+    ports:
+      - 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+
+volumes:
+  postgres_data:
+    driver: local
+

@@ -51,8 +51,8 @@ jobs:
       - uses: ./.github/actions/init
         name: Common Steps
 
-      - name: Build nouns
-        run: cargo build -p nouns --release
+      - name: Build words
+        run: cargo build -p words --release
 
   build-aggregator:
     runs-on: ubuntu-latest

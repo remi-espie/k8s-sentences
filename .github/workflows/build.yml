@@ -3,120 +3,83 @@ name: Build Docker Image
 on:
   push:
     branches:
-      - main
+      - postgres
 
 jobs:
-    lint:
+  lint:
       name: Lint the Rust packages
       uses: ./.github/workflows/lint.yml
 
-    build-verbs:
-      needs: lint
-      permissions:
-        packages: write
+  build-words:
+    needs: lint
+    permissions:
+      packages: write
 
-      env:
-        REGISTRY: ghcr.io
-        IMAGE_NAME: ${{ github.repository }}
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
 
-      runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@v4
-        name: Checkout project
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      name: Checkout project
 
-      - uses: docker/login-action@v2
-        name: Log in to the container registry
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+    - uses: docker/login-action@v2
+      name: Log in to the container registry
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: docker/metadata-action@v4
-        name: Extract metadata (tags, labels) for Docker
-        id: meta-verbs
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/verbs
-          tags: |
-            latest
+    - uses: docker/metadata-action@v4
+      name: Extract metadata (tags, labels) for Docker
+      id: meta-verbs
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/postgres/words
+        tags: |
+          latest
 
-      - uses: docker/build-push-action@v4
-        name: Build and push the Docker image
-        with:
-          context: ./verbs
-          push: true
-          tags: ${{ steps.meta-verbs.outputs.tags }}
-          labels: ${{ steps.meta-verbs.outputs.labels }}
+    - uses: docker/build-push-action@v4
+      name: Build and push the Docker image
+      with:
+        context: ./verbs
+        push: true
+        tags: ${{ steps.meta-verbs.outputs.tags }}
+        labels: ${{ steps.meta-verbs.outputs.labels }}
 
-    build-nouns:
-      needs: lint
-      permissions:
-        packages: write
+  build-aggregator:
+    needs: lint
+    permissions:
+      packages: write
 
-      env:
-        REGISTRY: ghcr.io
-        IMAGE_NAME: ${{ github.repository }}
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
 
-      runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@v4
-        name: Checkout project
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      name: Checkout project
 
-      - uses: docker/login-action@v2
-        name: Log in to the container registry
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+    - uses: docker/login-action@v2
+      name: Log in to the container registry
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: docker/metadata-action@v4
-        name: Extract metadata (tags, labels) for Docker
-        id: meta-nouns
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nouns
-          tags: |
-            latest
+    - uses: docker/metadata-action@v4
+      name: Extract metadata (tags, labels) for Docker
+      id: meta-aggregator
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/postgres/aggregator
+        tags: |
+          latest
 
-      - uses: docker/build-push-action@v4
-        name: Build and push the Docker image
-        with:
-          context: ./nouns
-          push: true
-          tags: ${{ steps.meta-nouns.outputs.tags }}
-          labels: ${{ steps.meta-nouns.outputs.labels }}
-
-    build-aggregator:
-      needs: lint
-      permissions:
-        packages: write
-
-      env:
-        REGISTRY: ghcr.io
-        IMAGE_NAME: ${{ github.repository }}
-
-      runs-on: ubuntu-latest
-      steps:
-      - uses: actions/checkout@v4
-        name: Checkout project
-
-      - uses: docker/login-action@v2
-        name: Log in to the container registry
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: docker/metadata-action@v4
-        name: Extract metadata (tags, labels) for Docker
-        id: meta-aggregator
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/aggregator
-          tags: |
-            latest
-
-      - uses: docker/build-push-action@v4
-        name: Build and push the Docker image
-        with:
-          context: ./aggregator
-          push: true
-          tags: ${{ steps.meta-aggregator.outputs.tags }}
-          labels: ${{ steps.meta-aggregator.outputs.labels }}
+    - uses: docker/build-push-action@v4
+      name: Build and push the Docker image
+      with:
+        context: ./aggregator
+        push: true
+        tags: ${{ steps.meta-aggregator.outputs.tags }}
+        labels: ${{ steps.meta-aggregator.outputs.labels }}

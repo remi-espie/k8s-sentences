@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: verbs
+  name: words
   namespace: sentence
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: verbs
+      app: words
   template:
     metadata:
       labels:
-        app: verbs
+        app: words
     spec:
       containers:
-      - name: verbs
-        image: ghcr.io/remi-espie/k8s-sentences/verbs:latest
+      - name: words
+        image: ghcr.io/remi-espie/k8s-sentences/postgres/words:latest
         resources:
           limits:
             memory: "128Mi"
@@ -23,4 +23,4 @@ spec:
         securityContext:
           privileged: false
         ports:
-        - containerPort: 8082
+        - containerPort: 8081

@@ -12,8 +12,6 @@ RUN cargo build --release --target=x86_64-unknown-linux-musl
 
 FROM scratch AS prod
 
-COPY --from=build /app/target/x86_64-unknown-linux-musl/release/verbs /verbs
+COPY --from=build /app/target/x86_64-unknown-linux-musl/release/words /words
 
-COPY verbs.json verbs.json
-
-CMD ["./verbs"]
+CMD ["./words"]

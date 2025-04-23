@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-sql
+  namespace: sentence
+data:
+  tables.sql: |
+    CREATE DATABASE IF NOT EXISTS words;
+  
+    CREATE TABLE nouns (
+    id SERIAL PRIMARY KEY,
+    noun TEXT NOT NULL
+    );
+    
+    INSERT INTO nouns (noun) VALUES ('cat'), ('dog'), ('bird'), ('fish');
+    
+    CREATE TABLE verbs (
+    id SERIAL PRIMARY KEY,
+    verb TEXT NOT NULL
+    );
+    
+    INSERT INTO verbs (verb) VALUES ('eat'), ('f**k'), ('marry'), ('kill');
