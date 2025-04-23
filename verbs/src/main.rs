@@ -1,5 +1,5 @@
 use actix_web::{web, App, HttpServer, Responder};
-use rand::seq::SliceRandom;
+use rand::seq::IndexedRandom;
 use serde::Deserialize;
 use std::fs;
 
@@ -11,7 +11,7 @@ struct Verbs {
 async fn get_verbs() -> impl Responder {
     let data = fs::read_to_string("verbs.json").expect("Unable to read file");
     let verbs: Verbs = serde_json::from_str(&data).expect("Unable to parse JSON");
-    let verb = verbs.verbs.choose(&mut rand::thread_rng()).unwrap();
+    let verb = verbs.verbs.choose(&mut rand::rng()).unwrap();
     verb.to_string()
 }
 
