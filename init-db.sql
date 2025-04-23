@@ -1,9 +1,3 @@
-DROP DATABASE IF EXISTS words;
-CREATE DATABASE words;
-
-\c words
-
-
 CREATE TABLE nouns (
                        id SERIAL PRIMARY KEY,
                        noun TEXT NOT NULL

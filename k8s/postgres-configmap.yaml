@@ -5,8 +5,6 @@ metadata:
   namespace: sentence
 data:
   tables.sql: |
-    CREATE DATABASE IF NOT EXISTS words;
-  
     CREATE TABLE nouns (
     id SERIAL PRIMARY KEY,
     noun TEXT NOT NULL
