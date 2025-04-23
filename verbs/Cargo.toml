@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-actix-web = "4.9.0"
-rand = "0.8.5"
-serde = { version = "1.0.217", features = ["derive"] }
-serde_json = "1.0.135"
+actix-web = "4.10.2"
+rand = "0.9.1"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
