@@ -33,7 +33,7 @@ jobs:
 
     - uses: docker/metadata-action@v4
       name: Extract metadata (tags, labels) for Docker
-      id: meta-verbs
+      id: meta-words
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/postgres/words
         tags: |
@@ -42,10 +42,10 @@ jobs:
     - uses: docker/build-push-action@v4
       name: Build and push the Docker image
       with:
-        context: ./verbs
+        context: ./words
         push: true
-        tags: ${{ steps.meta-verbs.outputs.tags }}
-        labels: ${{ steps.meta-verbs.outputs.labels }}
+        tags: ${{ steps.meta-words.outputs.tags }}
+        labels: ${{ steps.meta-words.outputs.labels }}
 
   build-aggregator:
     needs: lint
