@@ -16,6 +16,32 @@ spec:
       containers:
       - name: words
         image: ghcr.io/remi-espie/k8s-sentences/postgres/words:latest
+        env:
+          - name: PG_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: PG_NAME
+          - name: PG_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: PG_HOST
+          - name: PG_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: PG_PORT
+          - name: PG_USER
+            valueFrom:
+              configMapKeyRef:
+                name: postgres-config
+                key: PG_USER
+          - name: PG_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-credentials
+                key: PG_PASSWORD
         resources:
           limits:
             memory: "128Mi"

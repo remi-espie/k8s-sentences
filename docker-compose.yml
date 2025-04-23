@@ -2,16 +2,20 @@ services:
   words:
     image: words:latest
     ports:
-      - 8081:8081
+      - "8081:8081"
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/words
+      - PG_NAME=words
+      - PG_HOST=postgres
+      - PG_PORT=5432
+      - PG_USER=postgres
+      - PG_PASSWORD=postgres
     depends_on:
       - postgres
 
   aggregator:
     image: aggregator:latest
     ports:
-      - 8080:8080
+      - "8080:8080"
     depends_on:
       - words
 

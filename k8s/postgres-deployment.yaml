@@ -18,15 +18,24 @@ spec:
           image: postgres:latest
           env:
             - name: POSTGRES_DB
-              value: words
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: PG_NAME
             - name: POSTGRES_USER
-              value: postgres
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: PG_USER
             - name: POSTGRES_PASSWORD
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: PG_PASSWORD
           volumeMounts:
             - name: init-sql
               mountPath: /docker-entrypoint-initdb.d
       volumes:
         - name: init-sql
           configMap:
-            name: postgres-init-sql
+            name: postgres-config

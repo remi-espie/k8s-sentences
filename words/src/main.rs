@@ -41,12 +41,19 @@ async fn get_verb(client: web::Data<Client>) -> impl Responder {
 
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
-    // Load the database url from environment variables
-    let database_url: String = env::var("DATABASE_URL")
-        .unwrap_or("postgres://postgres:postgres@postgres:5432/words".to_string());
+    // Load environment variables for database connection
+    let user = env::var("PG_USER").unwrap_or("postgres".to_string());
+    let passwd = env::var("PG_PASSWORD").unwrap_or("password".to_string());
+    let host = env::var("PG_HOST").unwrap_or("postgres".to_string());
+    let port = env::var("PG_PORT").unwrap_or("5432".to_string());
+    let dbname = env::var("PG_NAME").unwrap_or("words".to_string());
+    let connection_string = format!(
+        "host={} port={} user={} password={} dbname={}",
+        host, port, user, passwd, dbname
+    );
 
     // Connect to the PostgreSQL database
-    let (client, connection) = tokio_postgres::connect(&database_url, NoTls)
+    let (client, connection) = tokio_postgres::connect(&connection_string, NoTls)
         .await
         .expect("Failed to connect to the database");
 
