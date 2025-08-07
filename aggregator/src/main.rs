@@ -14,7 +14,7 @@ async fn aggregate() -> impl Responder {
         .await
         .unwrap();
     let hostname = hostname::get().unwrap().into_string().unwrap();
-    format!("{} {} from {}", nouns, verbs, hostname)
+    format!("{nouns} {verbs} from {hostname}")
 }
 
 #[actix_web::main]
