@@ -6,4 +6,4 @@ edition = "2021"
 [dependencies]
 actix-web = "4.11.0"
 hostname = "0.4.1"
-reqwest = { version = "0.12.23", default-features = false, features = ["blocking", "json", "rustls-tls"] }
+reqwest = { version = "0.12.24", default-features = false, features = ["blocking", "json", "rustls-tls"] }
